@@ -1,0 +1,7 @@
+steps: 
+1. Create conda env
+2. Install dependencies from requirements.txt
+3. check api from local browser : uvicorn api.main --port 8000 --reload
+4. check api from docker container:
+a. docker build -t image_api_docker .
+b. docker run -p 80:8000 image_api_docker
