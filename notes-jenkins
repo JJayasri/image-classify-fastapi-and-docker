@@ -1,7 +1,2 @@
 
-
-
-ngrok:this link is public ip for accessing jenkins
- http://d264-2406-b400-d1-1fa2-b46c-25cc-ecad-dbcc.in.ngrok.io
-
  now this link should be given in webhooks as localhost cannot be given and portforawrrded
