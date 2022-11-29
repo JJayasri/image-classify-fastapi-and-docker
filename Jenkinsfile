@@ -14,7 +14,7 @@ pipeline {
 	   }
 	   stage('Run Image') {
 	        steps {
-	        sh 'docker run -d -p 8001:8001 imageclassify:v1'
+	        sh 'docker run -d -p 8001:8000 imageclassify:v1'
 	        }
 	   }
 	   stage('Testing'){
