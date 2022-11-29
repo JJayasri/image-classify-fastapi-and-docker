@@ -5,3 +5,4 @@ steps:
 4. check api from docker container:
 a. docker build -t image_api_docker .
 b. docker run -p 80:8000 image_api_docker
+.
