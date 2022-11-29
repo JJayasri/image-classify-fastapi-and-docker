@@ -1,0 +1,98 @@
+
+
+steps to build jeninks pipeline:
+
+1. Install jenkins- docker run -d -u root --restart=on-failure -p 8080:8080 -p 50000:50000  -v C:\users\jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock jenkins/jenkins:lts-jdk11
+(jenkins image is downloaded using docker giving root permissions)
+
+a.After installation, login to local browser provided at the end of console 
+b.Fill out username and password(which is there in your local machine path)
+c.Install necessary plugins for jenkins to open(I suggest to use Jenkins-all plugins which are suggested option)
+d.Fill out the form for user,name,mail-id(optional you can skip),localhost ip change(skip)
+e.I've tried out freestype project structure and jenkins pipeline 
+(For 'e' to be done we need to have github and all the contents of the project to be pushed into github)
+
+2.Install ngrok- for port forwarding (as we have used 8080 which is local, we need to make it public ip for github webhook purpose)
+
+ngrok http --scheme=http 8080 --host-header=localhost:8080
+
+This provides a interface to open the browser - http://127.0.0.1:4040
+
+On opening the link ,we get http ngrok address -Login into it 
+(Eg:http://27cf-2406-b400-d1-1fa2-38ba-7382-ee4-c325.in.ngrok.io)
+
+3.change jenkins url in manage-jenkins->configure system->jenkins location
+and place this url in 
+
+Go to github project-xyz->settings->webhooks section->Add webhook
+http address+/github-webhook/
+
+eg:(http://6400-2406-b400-d1-1fa2-59b4-d645-2136-2f65.in.ngrok.io/github-webhook/) and save
+
+Install pugins:
+
+generic webhook trigger,github integration
+docker,docker pipeline,docker api
+
+4. To test a simple project
+Go to item->freestyle project->save
+Next window opens, In general->github project->place github url of project
+InSource code management->git->place url->branch name
+in build triggers-> build hook trigger gitscm polling->apply and save
+
+next build project and check console output
+
+Before building pipeline we need to install docker in root folder by entering into docker container of jenkins using 
+a.docker exec -u 0 -it 5288e9feb126 bin/bash
+ab.pt-get update && apt-get install -y docker.io
+
+4.For building jenkins pipeline
+
+add 'Jenkinsfile' in project root folder 
+structure:
+pipeline {
+	agent any
+	    stages {
+	        stage('Clone Repository') {
+	        /* Cloning the repository to our workspace */
+	        steps {
+	        checkout scm
+	        }
+	   }
+	   stage('Build Image') {
+	        steps {
+	        sh 'docker build -t imageclassify:v1 .'
+	        }
+	   }
+	   stage('Run Image') {
+	        steps {
+	        sh 'docker run -d -p 8001:8000 imageclassify:v1'
+	        }
+	   }
+	   stage('Testing'){
+	        steps {
+	            echo 'Testing..'
+	            }
+	   }
+    }
+}
+
+open item->build pipeline
+In general->github project->place github url of project
+in build triggers-> build hook trigger gitscm polling
+in pipeline->definition-pipeline for SCM->SCM=git->repo url->branch name->save and apply
+next Build and check in console output
+
+This 8001 is host port which we expose in jenkins file (In docker run -d -p 8001:8000 imageclassify:v1) 
+5.Check the address (http://localhost:8001) with your API requests get or post
+
+
+
+
+
+
+
+
+
+
+
