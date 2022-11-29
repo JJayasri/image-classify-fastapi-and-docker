@@ -48,7 +48,7 @@ ab.pt-get update && apt-get install -y docker.io
 
 4.For building jenkins pipeline
 
-add 'Jenkinsfile' in project root folder 
+add 'Jenkinsfile' in project root folder .
 structure:
 pipeline {
 	agent any
